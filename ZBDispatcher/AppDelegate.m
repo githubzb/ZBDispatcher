@@ -19,7 +19,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     //设置允许调度的scheme
-    [ZBDispatcher addAllowedScheme:@"app"];
+    [zb addAllowedScheme:@"app"];
     
     /***测试url
      1、app://Test/showName?name=dr.box          成功跳转
@@ -34,31 +34,32 @@
 
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options{
-    return [ZBDispatcher performActionWithURL:url
-                                   completion:^(ZBRemoteDispatchState state, NSString * _Nonnull url)
-            {
-                if (state == ZBRemoteDispatchStateSuccess) {
-                    return;
-                }
-                NSString *title = nil;
-                if (state == ZBRemoteDispatchStateRejected) {
-                    //无权限访问
-                    title = @"你无权访问!";
-                }
-                if (state == ZBRemoteDispatchStateNotAllowScheme) {
-                    //不被允许的scheme
-                    title = @"该scheme不被允许!";
-                }
-                if (state == ZBRemoteDispatchStateNotFoundTarget) {
-                    //调度对象未找到
-                    title = @"未发现执行者";
-                }
-                if (state == ZBRemoteDispatchStateNotFoundAction) {
-                    //调度方法未找到
-                    title = @"未发现执行方法";
-                }
-                [self pushWarnPageByTitle:title url:url];
-            }];
+    return [zb performActionWithURL:url
+                         completion:^(ZBRemoteDispatchState state, NSString * _Nonnull url)
+    {
+        if (state == ZBRemoteDispatchStateSuccess) {
+            return;
+        }
+        NSString *title = nil;
+        if (state == ZBRemoteDispatchStateRejected) {
+            //无权限访问
+            title = @"你无权访问!";
+        }
+        if (state == ZBRemoteDispatchStateNotAllowScheme) {
+            //不被允许的scheme
+            title = @"该scheme不被允许!";
+        }
+        if (state == ZBRemoteDispatchStateNotFoundTarget) {
+            //调度对象未找到
+            title = @"未发现执行者";
+        }
+        if (state == ZBRemoteDispatchStateNotFoundAction) {
+            //调度方法未找到
+            title = @"未发现执行方法";
+        }
+        [self pushWarnPageByTitle:title url:url];
+        
+    }];
 }
 
 - (void)pushWarnPageByTitle:(NSString *)title url:(NSString *)url{

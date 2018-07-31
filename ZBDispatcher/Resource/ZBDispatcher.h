@@ -100,3 +100,5 @@ typedef void (^ZBDispatchCompletion)(ZBRemoteDispatchState state, NSString *url)
 
 @end
 NS_ASSUME_NONNULL_END
+
+typedef ZBDispatcher zb;
